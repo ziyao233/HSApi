@@ -6,11 +6,13 @@
 include ../common.mk
 
 GHCFLAGS	+= -i../HSApi/hi
+HSPKGS		:= transformers
+GHCLDFLAGS	:= $(foreach lib,$(HSPKGS),-package $(lib))
 
 default: testall
 
 TESTS		:= \
-coroutine.test
+coroutine.test file.test
 
 TESTSEXEC	:= $(patsubst %.test, %.exec, $(TESTS))
 TESTSOBJ	:= $(patsubst %.test, %.o, $(TESTS))
@@ -31,4 +33,4 @@ clean:
 
 %.exec: %.o ../HSApi/libHSApi.a
 	@echo Linking test $<
-	@$(GHC) $< $(GHCFLAGS) ../HSApi/libHSApi.a -o $@
+	@$(GHC) --make $< $(GHCFLAGS) ../HSApi/libHSApi.a -o $@ $(GHCLDFLAGS)

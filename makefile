@@ -8,7 +8,7 @@ default: library
 library:
 	$(MAKE) -C HSApi
 
-test:
+test: library
 	$(MAKE) -C tests
 
 clean:
