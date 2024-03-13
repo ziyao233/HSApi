@@ -16,4 +16,4 @@ CFLAGS		?= -Wall -Wextra -pedantic -Werror -O2
 	$(GHC) $< -c $(GHCFLAGS)
 
 %.o: %.c
-	$(CC) $< -c $(CFLAGS)
+	$(CC) $< -c $(CFLAGS) -o $@

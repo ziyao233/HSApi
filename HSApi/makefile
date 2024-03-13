@@ -6,7 +6,7 @@
 include ../common.mk
 
 OBJS		:= \
-Coroutine.o OS/File.o
+Coroutine.o OS/File.o OS/Socket.o OS/CSocket.o
 
 HIDIR		?= hi
 LIB		:= libHSApi.a
