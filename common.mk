@@ -9,7 +9,7 @@ GHCPKG		?= ghc-pkg-$(GHCVER)
 CC		?= gcc
 AR		?= ar
 
-GHCFLAGS	?= -Werror
+GHCFLAGS	?= -Werror -fforce-recomp
 CFLAGS		?= -Wall -Wextra -pedantic -Werror -O2
 
 %.o: %.hs
