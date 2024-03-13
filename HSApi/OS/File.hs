@@ -15,22 +15,22 @@ import Foreign.C.Types
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Maybe
 
-type Handler = Int
+type Handler = CInt
 
 foreign import ccall "unistd.h close"
-  close_ :: Handler -> IO Int
+  close_ :: Handler -> IO CInt
 foreign import ccall "unistd.h read"
-  read_ :: Handler -> Ptr CChar -> Int -> IO Int
+  read_ :: Handler -> Ptr CChar -> CInt -> IO CInt
 foreign import ccall "unistd.h write"
-  write_ :: Handler -> Ptr CChar -> Int -> IO Int
+  write_ :: Handler -> Ptr CChar -> CInt -> IO CInt
 foreign import ccall "unistd.h dup"
   dup_ :: Handler -> IO Handler
 foreign import ccall "unistd.h fileno"
-  fileno_ :: Ptr () -> IO (Int)
+  fileno_ :: Ptr () -> IO (CInt)
 foreign import ccall "unistd.h fopen"
   fopen_ :: CString -> CString -> IO (Ptr ())
 foreign import ccall "unistd.h fclose"
-  fclose_ :: Ptr () -> IO Int
+  fclose_ :: Ptr () -> IO CInt
 
 eitherErrno :: IO (Either Errno a)
 eitherErrno = getErrno >>= return . Left
@@ -67,9 +67,9 @@ fClose f = close_ f >>= \r ->
   if r == 0 then return $ Right () else eitherErrno
 
 fRead :: Handler -> Ptr CChar -> Int -> IO (Either Errno Int)
-fRead f b s = read_ f b s >>= \r ->
-  if r >= 0 then return $ Right r else eitherErrno
+fRead f b s = read_ f b (CInt $ fromIntegral s) >>= \r ->
+  if r >= 0 then return $ Right (fromIntegral r) else eitherErrno
 
 fWrite :: Handler -> Ptr CChar -> Int -> IO (Either Errno Int)
-fWrite f b s = write_ f b s >>= \r ->
-  if r >= 0 then return $ Right r else eitherErrno
+fWrite f b s = write_ f b (CInt $ fromIntegral s) >>= \r ->
+  if r >= 0 then return $ Right (fromIntegral r) else eitherErrno
